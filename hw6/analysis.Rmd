@@ -1,0 +1,55 @@
+---
+title: "Report"
+author: "Zhiqiang Liao"
+output: pdf_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+# Source your functions
+source('~/Desktop/R/solution/hw6/functions.R')
+```
+
+You can also embed plots, for example:
+
+```{r, echo=TRUE}
+# get archive table
+stringr_df <- get_archive_table('stringr')
+
+# plot
+ggstep(stringr_df)
+```
+Analysis: From this plot, it is obvious that the size of "stringr" package has been increasing, though not significently, along with every revision.
+
+
+
+
+
+The following is the Plat A: all packages in one single frame
+
+```{r, echo=TRUE}
+dataBoot = get_archive_table("boot")
+dataGgplot2 = get_archive_table("ggplot2")
+dataRcurl = get_archive_table("RCurl")
+dataXml = get_archive_table("XML")
+dataCombin = merge(merge(dataBoot, dataGgplot2, all = TRUE), 
+                   merge(dataRcurl, dataXml, all = TRUE), all = TRUE)
+ggplot(data = dataCombin, aes(x = date, y = size, colour = name)) + 
+       geom_step() + labs(y = "Size(Kilobyte)")
+```
+  
+  
+  Analysis: Through comparing 4 different packages, we can see that the size of "ggplot2", in general, is larger than any other packages. In addition, the common of all these packages is that their sizes are below 2500 Kilobytes after the last revision.
+
+
+The following is the Plat A: one package per facet
+
+```{r, echo=TRUE}
+ggplot(data = dataCombin, aes(x = date, y = size, colour = name)) + geom_step() + 
+  labs(y = "Size(Kilobyte)") + facet_wrap(~ name, scales = "free")
+```
+  
+  Analysis: By graphing the packages separately, we can see that there is always a moment that the size of each package is significently larger than the size in any other moments.
